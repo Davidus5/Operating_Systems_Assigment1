@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: legacy_recipe_app
+    # טעינת קובץ משתני הסביבה
+    env_file:
+      - .env
+    volumes:
+      # מיפוי קובץ המלאי פנימה - כך שכל שינוי ישתקף מיד!
+      - ./inventory.txt:/app/inventory.txt
+    # אנחנו לא חייבים לחשוף את פורט 5000 החוצה למחשב המארח
+    # כי ה-proxy מדבר איתו ברשת הפנימית של דוקר, אבל אפשר להשאיר לצורכי דיבאג.
+    expose:
+      - "5000"
+
+  proxy:
+    image: nginx:alpine
+    container_name: legacy_home_proxy
+    ports:
+      - "80:80" # חושף את פורט 80 של הקונטיינר לפורט 80 במחשב שלך
+    volumes:
+      # מכניס את קובץ ההגדרות שלנו לתוך ה-Nginx
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # מכניס את קובץ הדאשבורד לתיקייה שממנה Nginx מגיש קבצים
+      - ./index.html:/usr/share/nginx/html/index.html:ro
+    depends_on:
+      - app # מוודא שהפייתון עולה לפני ה-Nginx
