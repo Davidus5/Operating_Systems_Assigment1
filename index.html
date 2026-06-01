@@ -31,7 +31,7 @@
     </div>
 
     <script>
-        // פונקציה שפונה לשרת הפייתון ומעדכנת את ה-HTML
+        //functions that comply to the python server and update the HTML
         async function fetchDashboardData() {
             try {
                 const response = await fetch('/api');
@@ -41,7 +41,7 @@
                 document.getElementById('suggestion').innerText = data.suggestion;
 
                 const inventoryList = document.getElementById('inventory');
-                inventoryList.innerHTML = ''; // מנקה את הרשימה הישנה
+                inventoryList.innerHTML = ''; // clears the old list
                 data.inventory.forEach(item => {
                     const li = document.createElement('li');
                     li.innerText = item;
@@ -51,8 +51,7 @@
                 console.error("Error fetching data:", error);
             }
         }
-
-        // קורא לפונקציה פעם אחת מיד, ואז כל 3 שניות
+        //calls the function once immediately, and then every 3 seconds
         fetchDashboardData();
         setInterval(fetchDashboardData, 3000);
     </script>

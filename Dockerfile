@@ -1,20 +1,21 @@
-# הגדרת תמונת הבסיס - פייתון 3.9 בגרסה רזה כדי לחסוך במקום, כפי שנדרש
+#get python:3.9-slim image as instructed
 FROM python:3.9-slim
 
-# הגדרת תיקיית העבודה בתוך הקונטיינר
+
+#define the work folder inside the container
 WORKDIR /app
 
-# העתקת קובץ דרישות הספריות פנימה
+#copy requirements file to the container, for installing libraries
 COPY requirements.txt .
 
-# התקנת הספריות הדרושות
+#install the libraries as listed in requirements file
 RUN pip install --no-cache-dir -r requirements.txt
 
-# העתקת קוד האפליקציה פנימה (את ה-inventory.txt ואת ה-.env לא נעתיק דרך כאן)
+#copy the python app file inside the container
 COPY app.py .
 
-# חשיפת הפורט שעליו רץ שרת הפלאסק
+#expose port 5000 for the flask server
 EXPOSE 5000
 
-# הפקודה שתרוץ כשהקונטיינר יעלה
+#command that will run when the container is up
 CMD ["python", "app.py"]

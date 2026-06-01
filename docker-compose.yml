@@ -4,26 +4,26 @@ services:
   app:
     build: .
     container_name: legacy_recipe_app
-    # טעינת קובץ משתני הסביבה
+    #load environment variables
     env_file:
       - .env
     volumes:
-      # מיפוי קובץ המלאי פנימה - כך שכל שינוי ישתקף מיד!
+      #map inventory file from the host machine, to make sure it updates without needing to re-build the image
       - ./inventory.txt:/app/inventory.txt
-    # אנחנו לא חייבים לחשוף את פורט 5000 החוצה למחשב המארח
-    # כי ה-proxy מדבר איתו ברשת הפנימית של דוקר, אבל אפשר להשאיר לצורכי דיבאג.
+   #expose port 5000
     expose:
       - "5000"
 
+  #proxy settings
   proxy:
     image: nginx:alpine
     container_name: legacy_home_proxy
     ports:
-      - "80:80" # חושף את פורט 80 של הקונטיינר לפורט 80 במחשב שלך
+      - "80:80" #expose container port 80 to host port 80
     volumes:
-      # מכניס את קובץ ההגדרות שלנו לתוך ה-Nginx
+      #include settings file in the Nginx proxy
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      # מכניס את קובץ הדאשבורד לתיקייה שממנה Nginx מגיש קבצים
+      #include dashboard file, into the folder that Nginx uses
       - ./index.html:/usr/share/nginx/html/index.html:ro
     depends_on:
-      - app # מוודא שהפייתון עולה לפני ה-Nginx
+      - app #make sure that the python app runs before the Nginx proxy

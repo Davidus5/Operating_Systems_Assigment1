@@ -1,13 +1,9 @@
-# אל תכניס סביבות וירטואליות
-venv/
-env/
+#ignore venv folder
 .venv/
 
-# אל תכניס קבצי מטמון של פייתון
+#ignore cache files
 __pycache__/
 *.pyc
 
-# *** חשוב: אל תכניס את קובץ הסביבה שמכיל מידע רגיש ***
+#ignore .env file
 .env
-
-# (אנחנו מחברים את ה-inventory מבחוץ, אבל לא נורא אם הוא בחוץ)
